@@ -61,6 +61,26 @@ exp.post('/api/movies', (req, res) => {
     res.send(movie);
 })
 
+exp.put('/api/movies/:id', (req, res) => {
+    var movieId=req.params.id;
+    movieId=Number(movieId);
+    let movie=movies[movieId];
+    if(!(movieId<movies.length)) res.send("no movie found for id: "+movieId);
+    const schema = Joi.object({
+        name : Joi.string().min(3).required()
+
+    });
+    const result = schema.validate(req.body);
+    console.log(result);
+
+    if(result.error){
+        res.status(400).send(result.error.details[0].message);
+        return;
+    }
+    movie.name = req.body.name;
+    res.send(movie);
+
+})
 
 
 
