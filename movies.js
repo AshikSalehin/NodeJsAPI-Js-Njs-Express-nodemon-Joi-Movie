@@ -1,42 +1,38 @@
 const express = require('express');
-const exp = express();
+const route = express.Router();
+const Joi = require('@hapi/joi');
+const movies =[
+    {id:0, name:''},
+    {id:1, name:'star war'},
+    {id:2, name:'Avatar'},
+    {id:3, name:'Tarjan'},
+    {id:4, name:'Kungfu'},
+    {id:5, name:'Captain Amarica'},
+    {id:6, name:'Toy Story'},
+    {id:7, name:'Mallificient'}
+];
 
-//Adding movies module after export
-const movies = require('./movies');
-
-//For convert data into json format for posting
-exp.use(express.json());
-
-exp.use('/abc', movies);
-/*
-//Middleware to show the method and path in console
-exp.use('/api/movies', (req, res, next) => {
+route.use('/api/movies', (req, res, next) => {
     console.log(req.url, req.method);
     next();
 })
-*/
-//For validation use joi package
-//const joi = require('@hapi/joi');
 
-//const path = require('path');
 
-/*
-
-exp.get('/', (req,res) =>{
+route.get('/', (req,res) =>{
     res.send('Hello Everyone from nodemon');
 });
 
-exp.get('/api/movies', (req,res) =>{
+route.get('/api/movies', (req,res) =>{
     res.send(movies);
 });
-exp.get('/api/movies/:id', (req,res) =>{
+route.get('/api/movies/:id', (req,res) =>{
     var movieId=req.params.id;
     movieId=Number(movieId);
     if(movieId<movies.length) res.send(movies[movieId]);
     else res.send("Maximum value of id is :"+(movies.length-1));
 });
 
-exp.post('/api/movies', (req, res) => {
+route.post('/api/movies', (req, res) => {
 
     const schema = Joi.object({
         name : Joi.string().min(3).required()
@@ -52,7 +48,7 @@ exp.post('/api/movies', (req, res) => {
     /*if(!req.body.name || req.body.name.length<3){
         res.status(400).send('Invalid Movie Name or The movie name is very small');
         return;
-    }/
+    }*/
 
     let movie = {
         id:movies.length,
@@ -62,7 +58,7 @@ exp.post('/api/movies', (req, res) => {
     res.send(movie);
 })
 
-exp.put('/api/movies/:id', (req, res) => {
+route.put('/api/movies/:id', (req, res) => {
     var movieId=req.params.id;
     movieId=Number(movieId);
     let movie=movies[movieId];
@@ -81,26 +77,9 @@ exp.put('/api/movies/:id', (req, res) => {
     movie.name = req.body.name;
     res.send(movie);
 
-})
-
-
-
-
-
-/*exp.get('/index', (req, res) => {
-    res.sendFile(path.join(__dirname, 'index.html'));
-})
-
-exp.get('/person', (req,res) =>{
-    res.send('This is person route');
 });
-exp.get('/person/:name/:age', (req,res) =>{
-    console.log(req.params);
-    //res.send(req.params);
-    res.send(req.query);
-});/
 
-exp.delete('/api/movies/:id', (req, res) => {
+route.delete('/api/movies/:id', (req, res) => {
     var movieId=req.params.id;
     movieId=Number(movieId);
     let movie=movies[movieId];
@@ -110,6 +89,5 @@ exp.delete('/api/movies/:id', (req, res) => {
     res.send(movie);
 });
 
-*/
-const port = process.env.PORT || '5000';
-exp.listen(port, () => console.log('listening to port: '+port));
+
+module.exports = route;
